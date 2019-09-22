@@ -5,7 +5,7 @@
 !*/
 
 # Recursively all filles under
-!/firstPrinciples/**
+!/quantumcomputingFirstPrinciples/**
 
 # Do not include 3rd party packages
 /github.com/*
