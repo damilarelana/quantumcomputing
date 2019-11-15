@@ -9,16 +9,18 @@ ibmqe_user = os.environ.get('IBMQE_USER')
 ibmqe_password = os.environ.get('IBMQE_PASSWORD')
 
 # login to IBM and instantiate the quantumEngine object
-eng = MainEngine(IBMBackend(use_hardware=True, num_runs=1024, verbose=False, user=ibmqe_user, password=ibmqe_password, device='ibmqx4', num_retries=3000, interval=1, retrieve_execution=None),
-                 engine_list=ibm_setup.get_engine_list())
-qubit = eng.allocate_qubit()  # allocate a quantum register with 1 qubit
+eng = MainEngine(
+  IBMBackend(use_hardware=True, num_runs=1024, verbose=False, user=ibmqe_user, password=ibmqe_password, device='ibmqx4', num_retries=3000, interval=1, retrieve_execution=None),
+  engine_list=ibm_setup.get_engine_list())
 
+# allocate a quantum register with 1 qubit
+qubit = eng.allocate_qubit()
 
-# allocate one qubit
-q1 = eng.allocate_qubit()
+# apply a Hadamard gate to put in super position
+H | qubit
 
-H | qubit  # apply a Hadamard gate
-Measure | qubit  # measure the qubit
+# measure the qubit
+Measure | qubit
 
 eng.flush()  # flush all gates (and execute measurements)
 print("Measured {}".format(int(qubit)))  # converting a qubit to int or bool gives access to the measurement result
