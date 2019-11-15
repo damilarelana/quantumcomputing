@@ -1,16 +1,16 @@
 from projectq import MainEngine  # import the main compiler engine
 from projectq.ops import H, Measure  # import the operations we want to perform (Hadamard and measurement)
 from projectq.backends import IBMBackend
-from os import getenv
-import projectq.setups.ibm
+import os
+import projectq.setups.ibm as ibm_setup
 
 # extract IBM Quantum Experience login details from environ 
-ibmqe_user = getenv('IBMQE_USER')
-ibmqe_password = getenv('IBMQE_PASSWORD')
+ibmqe_user = os.environ.get('IBMQE_USER')
+ibmqe_password = os.environ.get('IBMQE_PASSWORD')
 
 # login to IBM and instantiate the quantumEngine object
-eng = MainEngine(IBMBackend(user=ibmqe_user, password=ibmqe_password),
-                 engine_list=projectq.setups.ibm.get_engine_list())
+eng = MainEngine(IBMBackend(use_hardware=True, num_runs=1024, verbose=False, user=ibmqe_user, password=ibmqe_password, device='ibmqx4', num_retries=3000, interval=1, retrieve_execution=None),
+                 engine_list=ibm_setup.get_engine_list())
 qubit = eng.allocate_qubit()  # allocate a quantum register with 1 qubit
 
 
